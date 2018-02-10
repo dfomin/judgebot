@@ -2,9 +2,9 @@ package main
 
 import (
 	"bufio"
-	"commands"
 	"fmt"
-	"network"
+	"judgebot/commands"
+	"judgebot/network"
 	"os"
 	"strings"
 )
@@ -22,6 +22,9 @@ func InitCLI() {
 		switch params[0] {
 		case "judge":
 			result := commands.Judge(params[1:])
+			fmt.Println(result)
+		case "judgeList":
+			result := commands.JudgeList()
 			fmt.Println(result)
 		}
 	}
