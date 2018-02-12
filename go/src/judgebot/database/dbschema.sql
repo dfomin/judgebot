@@ -1,4 +1,6 @@
-CREATE DATABASE judgebot;
+CREATE DATABASE judgebot OWNER tstkbot;
+
+CREATE SCHEMA tstkbot AUTHORIZATION tstkbot;
 
 CREATE TABLE users (
     id serial NOT NULL,
