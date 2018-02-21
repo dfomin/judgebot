@@ -1,4 +1,8 @@
+CREATE USER judgebot WITH PASSWORD 'judgebot';
+
 CREATE DATABASE judgebot OWNER judgebot;
+
+\connect judgebot judgebot;
 
 CREATE SCHEMA judgebot AUTHORIZATION judgebot;
 
