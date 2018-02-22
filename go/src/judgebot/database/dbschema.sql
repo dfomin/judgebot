@@ -21,6 +21,7 @@ CREATE TABLE judgebot.judge_phrases (
 );
 
 CREATE TABLE judgebot.votes (
+    vote boolean NOT NULL,
     user_id integer NOT NULL,
     judge_phrase_id integer NOT NULL,
 

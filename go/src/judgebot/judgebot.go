@@ -12,7 +12,9 @@ import (
 func InitCLI() {
 	reader := bufio.NewReader(os.Stdin)
 	for {
-		command, _ := reader.ReadString('\n')
+		rawCommand, _ := reader.ReadString('\n')
+		command := strings.TrimSpace(rawCommand)
+
 		params := strings.Split(command, " ")
 
 		if len(params) == 0 {

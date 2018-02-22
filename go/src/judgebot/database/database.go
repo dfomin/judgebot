@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"judgebot/private"
 	"log"
+
+	_ "github.com/lib/pq"
 )
 
 type Controller struct {
@@ -12,7 +14,7 @@ type Controller struct {
 }
 
 func InitDatabase(name string) *Controller {
-	databaseInfo := fmt.Sprintf("user=%s password=%s dbname=%s sslmode=verify-full", private.DatabaseUser, private.DatabasePassword, private.DatabaseName)
+	databaseInfo := fmt.Sprintf("user=%s password=%s dbname=%s sslmode=disable", private.DatabaseUser, private.DatabasePassword, private.DatabaseName)
 
 	database, err := sql.Open("postgres", databaseInfo)
 	if err != nil {
