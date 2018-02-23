@@ -14,7 +14,7 @@ const judgePhraseQuery = `SELECT id FROM judgebot.judge_phrases WHERE phrase LIK
 const judgePhraseInsertQuery = `INSERT INTO judgebot.judge_phrases (phrase) VALUES ($1)`
 const voteForPhraseQuery = `INSERT INTO judgebot.votes (vote, user_id, judge_phrase_id) VALUES ($1, $2, $3)`
 const userIDQuery = `SELECT id FROM judgebot.users WHERE telegram_id = $1`
-const phraseIDQuery = `SELECT id FROM judgebot.judge_phrases WHERE phrase LIKE '$1'`
+const phraseIDQuery = `SELECT id FROM judgebot.judge_phrases WHERE phrase LIKE $1`
 
 type Controller struct {
 	DataBase *sql.DB
@@ -38,7 +38,7 @@ func InitDatabase(name string) *Controller {
 
 func (dbc *Controller) getUserID(telegramID int) int {
 	var userID int
-	err := dbc.DataBase.QueryRow(userIDQuery).Scan(&userID)
+	err := dbc.DataBase.QueryRow(userIDQuery, telegramID).Scan(&userID)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -47,13 +47,13 @@ func (dbc *Controller) getUserID(telegramID int) int {
 }
 
 func (dbc *Controller) getPhraseID(phrase string) int {
-	var userID int
-	err := dbc.DataBase.QueryRow(phraseIDQuery).Scan(&userID)
+	var phraseID int
+	err := dbc.DataBase.QueryRow(phraseIDQuery, phrase).Scan(&phraseID)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	return userID
+	return phraseID
 }
 
 func (dbc *Controller) JudgeVote(telegramID int, phrase string, vote bool) {
