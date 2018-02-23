@@ -6,6 +6,8 @@ CREATE DATABASE judgebot OWNER judgebot;
 
 CREATE SCHEMA judgebot AUTHORIZATION judgebot;
 
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA judgebot TO judgebot;
+
 CREATE TABLE judgebot.users (
     id serial NOT NULL,
     telegram_id integer UNIQUE NOT NULL,
