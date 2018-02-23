@@ -13,20 +13,20 @@ type Controller struct {
 	DataBase *sql.DB
 }
 
-func InitDatabase(name string) *Controller {
-	databaseInfo := fmt.Sprintf("user=%s password=%s dbname=%s sslmode=disable", private.DatabaseUser, private.DatabasePassword, private.DatabaseName)
+func Init() *Controller {
+	info := fmt.Sprintf("user=%s password=%s dbname=%s sslmode=verify-full", private.DatabaseUser, private.DatabasePassword, private.DatabaseName)
 
-	database, err := sql.Open("postgres", databaseInfo)
+	db, err := sql.Open("postgres", info)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	err = database.Ping()
+	err = db.Ping()
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	return &Controller{DataBase: database}
+	return &Controller{DataBase: db}
 }
 
 func (dbc *Controller) JudgeList() []string {

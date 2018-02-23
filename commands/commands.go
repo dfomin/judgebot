@@ -2,14 +2,13 @@ package commands
 
 import (
 	"judgebot/database"
-	"judgebot/private"
 )
 
 var _dbc *database.Controller = nil
 
 func dbc() *database.Controller {
 	if _dbc == nil {
-		_dbc = database.InitDatabase(private.DatabaseName)
+		_dbc = database.Init()
 	}
 
 	return _dbc
