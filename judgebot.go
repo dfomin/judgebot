@@ -6,6 +6,7 @@ import (
 	"judgebot/commands"
 	"judgebot/network"
 	"os"
+	"strconv"
 	"strings"
 )
 
@@ -28,6 +29,12 @@ func InitCLI() {
 		case "judgeList":
 			result := commands.JudgeList()
 			fmt.Println(result)
+		case "judgeVote":
+			userID, _ := strconv.Atoi(params[1])
+			phrase := params[2]
+			vote, _ := strconv.ParseBool(params[3])
+			fmt.Println(userID, phrase, vote)
+			commands.JudgeVote(userID, phrase, vote)
 		}
 	}
 }
