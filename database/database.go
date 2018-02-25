@@ -10,37 +10,44 @@ import (
 )
 
 const judgeListQuery = `SELECT phrase FROM judgebot.judge_phrases`
-const judgePhraseQuery = `SELECT id FROM judgebot.judge_phrases WHERE phrase LIKE '$1'`
-const judgePhraseInsertQuery = `INSERT INTO judgebot.judge_phrases (phrase) VALUES ($1)`
+const phraseInsertQuery = `INSERT INTO judgebot.judge_phrases (phrase) VALUES ($1) returning id`
 const voteForPhraseQuery = `INSERT INTO judgebot.votes (vote, user_id, judge_phrase_id) VALUES ($1, $2, $3)`
 const userIDQuery = `SELECT id FROM judgebot.users WHERE telegram_id = $1`
-const phraseIDQuery = `SELECT id FROM judgebot.judge_phrases WHERE phrase LIKE $1`
+const phraseIDQuery = `SELECT id FROM judgebot.judge_phrases WHERE phrase = $1`
+const userInsertQuery = `INSERT INTO judgebot.users (telegram_id) VALUES ($1) returning id`
 
 type Controller struct {
 	DataBase *sql.DB
 }
 
-func InitDatabase(name string) *Controller {
-	databaseInfo := fmt.Sprintf("user=judgebot password=%s dbname=judgebot sslmode=disable", private.DatabasePassword)
+func Init() *Controller {
+	//info := fmt.Sprintf("user=%s password=%s dbname=%s sslmode=verify-full", private.DatabaseUser, private.DatabasePassword, private.DatabaseName)
+	info := fmt.Sprintf("user=%s password=%s dbname=%s sslmode=disable", private.DatabaseUser, private.DatabasePassword, private.DatabaseName)
 
-	database, err := sql.Open("postgres", databaseInfo)
+	db, err := sql.Open("postgres", info)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	err = database.Ping()
+	err = db.Ping()
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	return &Controller{DataBase: database}
+	return &Controller{DataBase: db}
 }
 
 func (dbc *Controller) getUserID(telegramID int) int {
 	var userID int
-	err := dbc.DataBase.QueryRow(userIDQuery, telegramID).Scan(&userID)
+	var err = dbc.DataBase.QueryRow(userIDQuery, telegramID).Scan(&userID)
 	if err != nil {
-		log.Fatal(err)
+		if err != sql.ErrNoRows {
+			log.Fatal(err)
+		}
+		err = dbc.DataBase.QueryRow(userInsertQuery, telegramID).Scan(&userID)
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 
 	return userID
@@ -48,9 +55,15 @@ func (dbc *Controller) getUserID(telegramID int) int {
 
 func (dbc *Controller) getPhraseID(phrase string) int {
 	var phraseID int
-	err := dbc.DataBase.QueryRow(phraseIDQuery, phrase).Scan(&phraseID)
+	var err = dbc.DataBase.QueryRow(phraseIDQuery, phrase).Scan(&phraseID)
 	if err != nil {
-		log.Fatal(err)
+		if err != sql.ErrNoRows {
+			log.Fatal(err)
+		}
+		err = dbc.DataBase.QueryRow(phraseInsertQuery, phrase).Scan(&phraseID)
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 
 	return phraseID
