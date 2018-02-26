@@ -10,11 +10,12 @@ const judgePhrases = `judge_phrases`
 const votes = `votes`
 
 const judgeListQueryTemplate = `SELECT phrase FROM %s.%s`
-const phraseInsertQueryTemplate = `INSERT INTO %s.%s (phrase) VALUES ($1) RETURNING id`
-const voteForPhraseQueryTemplate = `INSERT INTO %s.%s (vote, user_id, judge_phrase_id) VALUES ($1, $2, $3)`
 const userIDQueryTemplate = `SELECT id FROM %s.%s WHERE telegram_id = $1`
 const phraseIDQueryTemplate = `SELECT id FROM %s.%s WHERE phrase = $1`
+const voteInsertQueryTemplate = `INSERT INTO %s.%s (vote, user_id, judge_phrase_id) VALUES ($1, $2, $3) 
+ON CONFLICT ON CONSTRAINT vote_pkey DO UPDATE SET vote = $1`
 const userInsertQueryTemplate = `INSERT INTO %s.%s (telegram_id) VALUES ($1) RETURNING id`
+const phraseInsertQueryTemplate = `INSERT INTO %s.%s (phrase) VALUES ($1) RETURNING id`
 
 func getJudgeListQuery() string {
 	return fmt.Sprintf(judgeListQueryTemplate, private.DatabaseName, judgePhrases)
@@ -24,8 +25,8 @@ func getPhraseInsertQuery() string {
 	return fmt.Sprintf(phraseInsertQueryTemplate, private.DatabaseName, judgePhrases)
 }
 
-func getVoteForPhraseQuery() string {
-	return fmt.Sprintf(voteForPhraseQueryTemplate, private.DatabaseName, votes)
+func getVoteInsertQuery() string {
+	return fmt.Sprintf(voteInsertQueryTemplate, private.DatabaseName, votes)
 }
 
 func getUserIDQuery() string {
