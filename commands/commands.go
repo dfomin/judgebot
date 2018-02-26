@@ -23,7 +23,7 @@ func Judge(names []string) string {
 	return result
 }
 
-func JudgeList() []string {
+func JudgeList() []database.JudgePhraseInfo {
 	return dbc().JudgeList()
 }
 

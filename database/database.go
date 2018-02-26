@@ -13,6 +13,12 @@ type Controller struct {
 	DataBase *sql.DB
 }
 
+type JudgePhraseInfo struct {
+	phrase   string
+	voteup   int
+	votedown int
+}
+
 func Init() *Controller {
 	//info := fmt.Sprintf("user=%s password=%s dbname=%s sslmode=verify-full", private.DatabaseUser, private.DatabasePassword, private.DatabaseName)
 	info := fmt.Sprintf("user=%s password=%s dbname=%s sslmode=disable", private.DatabaseUser, private.DatabasePassword, private.DatabaseName)
@@ -71,19 +77,21 @@ func (dbc *Controller) JudgeVote(telegramID int, phrase string, vote bool) {
 	}
 }
 
-func (dbc *Controller) JudgeList() []string {
+func (dbc *Controller) JudgeList() []JudgePhraseInfo {
 	rows, err := dbc.DataBase.Query(getJudgeListQuery())
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer rows.Close()
-	var phrases []string
+	var phrases []JudgePhraseInfo
 	for rows.Next() {
 		var phrase string
-		if err := rows.Scan(&phrase); err != nil {
+		var voteup int
+		var votedown int
+		if err := rows.Scan(&phrase, &voteup, &votedown); err != nil {
 			log.Fatal(err)
 		}
-		phrases = append(phrases, phrase)
+		phrases = append(phrases, JudgePhraseInfo{phrase, voteup, votedown})
 	}
 
 	return phrases
