@@ -12,4 +12,3 @@ DROP SCHEMA IF EXISTS judgebot;
 
 DROP DATABASE IF EXISTS judgebot;
 DROP USER IF EXISTS judgebot;
-

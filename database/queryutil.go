@@ -1,8 +1,8 @@
 package database
 
 import (
-	"judgebot/private"
 	"fmt"
+	"judgebot/private"
 )
 
 const users = `users`
