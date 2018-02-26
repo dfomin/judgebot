@@ -8,7 +8,7 @@ var _dbc *database.Controller = nil
 
 func dbc() *database.Controller {
 	if _dbc == nil {
-		_dbc = database.InitDatabase("judgebot")
+		_dbc = database.Init()
 	}
 
 	return _dbc

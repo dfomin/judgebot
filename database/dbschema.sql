@@ -29,3 +29,5 @@ CREATE TABLE judgebot.votes (
     CONSTRAINT user_id_fkey FOREIGN KEY (user_id) REFERENCES judgebot.users (id),
     CONSTRAINT judge_phrase_id_fkey FOREIGN KEY (judge_phrase_id) REFERENCES judgebot.judge_phrases (id)
 );
+
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA judgebot TO judgebot;
