@@ -10,11 +10,11 @@ import (
 )
 
 const judgeListQuery = `SELECT phrase FROM judgebot.judge_phrases`
-const phraseInsertQuery = `INSERT INTO judgebot.judge_phrases (phrase) VALUES ($1) returning id`
+const phraseInsertQuery = `INSERT INTO judgebot.judge_phrases (phrase) VALUES ($1) RETURNING id`
 const voteForPhraseQuery = `INSERT INTO judgebot.votes (vote, user_id, judge_phrase_id) VALUES ($1, $2, $3)`
 const userIDQuery = `SELECT id FROM judgebot.users WHERE telegram_id = $1`
 const phraseIDQuery = `SELECT id FROM judgebot.judge_phrases WHERE phrase = $1`
-const userInsertQuery = `INSERT INTO judgebot.users (telegram_id) VALUES ($1) returning id`
+const userInsertQuery = `INSERT INTO judgebot.users (telegram_id) VALUES ($1) RETURNING id`
 
 type Controller struct {
 	DataBase *sql.DB
@@ -24,22 +24,22 @@ func Init() *Controller {
 	//info := fmt.Sprintf("user=%s password=%s dbname=%s sslmode=verify-full", private.DatabaseUser, private.DatabasePassword, private.DatabaseName)
 	info := fmt.Sprintf("user=%s password=%s dbname=%s sslmode=disable", private.DatabaseUser, private.DatabasePassword, private.DatabaseName)
 
-	db, err := sql.Open("postgres", info)
+	database, err := sql.Open("postgres", info)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	err = db.Ping()
+	err = database.Ping()
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	return &Controller{DataBase: db}
+	return &Controller{DataBase: database}
 }
 
 func (dbc *Controller) getUserID(telegramID int) int {
 	var userID int
-	var err = dbc.DataBase.QueryRow(userIDQuery, telegramID).Scan(&userID)
+	err := dbc.DataBase.QueryRow(userIDQuery, telegramID).Scan(&userID)
 	if err != nil {
 		if err != sql.ErrNoRows {
 			log.Fatal(err)
@@ -55,7 +55,7 @@ func (dbc *Controller) getUserID(telegramID int) int {
 
 func (dbc *Controller) getPhraseID(phrase string) int {
 	var phraseID int
-	var err = dbc.DataBase.QueryRow(phraseIDQuery, phrase).Scan(&phraseID)
+	err := dbc.DataBase.QueryRow(phraseIDQuery, phrase).Scan(&phraseID)
 	if err != nil {
 		if err != sql.ErrNoRows {
 			log.Fatal(err)
