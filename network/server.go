@@ -1,9 +1,11 @@
 package network
 
 import (
+	"judgebot/commands"
 	"judgebot/private"
 	"log"
 	"net/http"
+	"strconv"
 
 	"gopkg.in/telegram-bot-api.v4"
 )
@@ -27,7 +29,13 @@ func InitServer() {
 	for update := range updates {
 		command := update.Message.Command()
 		switch command {
-		case "start":
+		case "judgeList":
+			phrases := commands.JudgeList()
+			answer := ""
+			for _, judgePhrase := range phrases {
+				answer += judgePhrase.Phrase + " " + strconv.Itoa(judgePhrase.Voteup) + " " + strconv.Itoa(judgePhrase.Votedown)
+			}
+			tgbotapi.NewMessage(update.Message.Chat.ID, answer)
 		}
 	}
 }

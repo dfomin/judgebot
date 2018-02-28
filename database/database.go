@@ -14,9 +14,9 @@ type Controller struct {
 }
 
 type JudgePhraseInfo struct {
-	phrase   string
-	voteup   int
-	votedown int
+	Phrase   string
+	Voteup   int
+	Votedown int
 }
 
 func Init() *Controller {
