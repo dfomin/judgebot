@@ -1,16 +1,16 @@
 \connect judgebot judgebot;
 
-INSERT INTO judgebot.users (id, telegram_id) VALUES (1, 1);
-INSERT INTO judgebot.users (id, telegram_id) VALUES (2, 2);
-INSERT INTO judgebot.users (id, telegram_id) VALUES (3, 3);
-INSERT INTO judgebot.users (id, telegram_id) VALUES (4, 4);
-INSERT INTO judgebot.users (id, telegram_id) VALUES (5, 5);
+INSERT INTO judgebot.users (telegram_id) VALUES (1);
+INSERT INTO judgebot.users (telegram_id) VALUES (2);
+INSERT INTO judgebot.users (telegram_id) VALUES (3);
+INSERT INTO judgebot.users (telegram_id) VALUES (4);
+INSERT INTO judgebot.users (telegram_id) VALUES (5);
 
-INSERT INTO judgebot.judge_phrases (id, phrase) VALUES (1, 'aaa');
-INSERT INTO judgebot.judge_phrases (id, phrase) VALUES (2, 'bbb');
-INSERT INTO judgebot.judge_phrases (id, phrase) VALUES (3, 'ccc');
-INSERT INTO judgebot.judge_phrases (id, phrase) VALUES (4, 'ddd');
-INSERT INTO judgebot.judge_phrases (id, phrase) VALUES (5, 'eee');
+INSERT INTO judgebot.judge_phrases (phrase) VALUES ('aaa');
+INSERT INTO judgebot.judge_phrases (phrase) VALUES ('bbb');
+INSERT INTO judgebot.judge_phrases (phrase) VALUES ('ccc');
+INSERT INTO judgebot.judge_phrases (phrase) VALUES ('ddd');
+INSERT INTO judgebot.judge_phrases (phrase) VALUES ('eee');
 
 INSERT INTO judgebot.votes (vote, user_id, judge_phrase_id) VALUES (TRUE, 1, 1);
 INSERT INTO judgebot.votes (vote, user_id, judge_phrase_id) VALUES (TRUE, 1, 2);
