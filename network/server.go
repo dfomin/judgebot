@@ -37,6 +37,12 @@ func InitServer() {
 			}
 			message := tgbotapi.NewMessage(update.Message.Chat.ID, answer)
 			bot.Send(message)
+
+		case "judgeAdd":
+			commands.JudgeVote(update.Message.From.ID, update.Message.CommandArguments(), true)
+
+		case "judgeRemove":
+			commands.JudgeVote(update.Message.From.ID, update.Message.CommandArguments(), false)
 		}
 	}
 }
