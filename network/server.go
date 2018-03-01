@@ -36,6 +36,12 @@ func InitServer() {
 				answer += judgePhrase.Phrase + " " + strconv.Itoa(judgePhrase.Voteup) + " " + strconv.Itoa(judgePhrase.Votedown)
 			}
 			tgbotapi.NewMessage(update.Message.Chat.ID, answer)
+
+		case "judgeAdd":
+			commands.JudgeVote(update.Message.From.ID, update.Message.CommandArguments(), true)
+
+		case "judgeRemove":
+			commands.JudgeVote(update.Message.From.ID, update.Message.CommandArguments(), false)
 		}
 	}
 }
