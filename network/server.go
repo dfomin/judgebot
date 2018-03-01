@@ -18,13 +18,13 @@ func InitServer() {
 
 	log.Printf("Authorized on account %s", bot.Self.UserName)
 
-	_, err = bot.SetWebhook(tgbotapi.NewWebhook("https://pigowl.com:88/"))
+	_, err = bot.SetWebhook(tgbotapi.NewWebhook("https://pigowl.com:8443/"))
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	updates := bot.ListenForWebhook("/")
-	go http.ListenAndServeTLS(":88", "fullchain.pem", "privkey.pem", nil)
+	go http.ListenAndServeTLS(":8443", "fullchain.pem", "privkey.pem", nil)
 
 	for update := range updates {
 		command := update.Message.Command()
@@ -33,9 +33,10 @@ func InitServer() {
 			phrases := commands.JudgeList()
 			answer := ""
 			for _, judgePhrase := range phrases {
-				answer += judgePhrase.Phrase + " " + strconv.Itoa(judgePhrase.Voteup) + " " + strconv.Itoa(judgePhrase.Votedown)
+				answer += judgePhrase.Phrase + " " + strconv.Itoa(judgePhrase.Voteup) + " " + strconv.Itoa(judgePhrase.Votedown) + "\n"
 			}
-			tgbotapi.NewMessage(update.Message.Chat.ID, answer)
+			message := tgbotapi.NewMessage(update.Message.Chat.ID, answer)
+			bot.Send(message)
 		}
 	}
 }
