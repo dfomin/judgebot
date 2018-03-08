@@ -41,9 +41,11 @@ func InitServer() {
 			for _, judgePhrase := range phrases {
 				// N - chatMembersCount, x - in favor, y - against
 				// x - y >= N / 3 && x >= N / 2
+				prefix := "- "
 				if inFavor(judgePhrase, chatMembersCount) {
-					answer += judgePhrase.Phrase + " " + strconv.Itoa(judgePhrase.Voteup) + " " + strconv.Itoa(judgePhrase.Votedown) + "\n"
+					prefix = "+ "
 				}
+				answer +=  prefix + judgePhrase.Phrase + " " + strconv.Itoa(judgePhrase.Voteup) + " " + strconv.Itoa(judgePhrase.Votedown) + "\n"
 			}
 			message := tgbotapi.NewMessage(update.Message.Chat.ID, answer)
 			bot.Send(message)
@@ -57,5 +59,5 @@ func InitServer() {
 	}
 }
 func inFavor(judgePhrase database.JudgePhraseInfo, chatMembersCount int) bool {
-	return judgePhrase.Voteup-judgePhrase.Votedown >= chatMembersCount/3 && judgePhrase.Voteup >= chatMembersCount/2
+	return float64(judgePhrase.Voteup-judgePhrase.Votedown) >= float64(chatMembersCount)/3 && float64(judgePhrase.Voteup+judgePhrase.Votedown) >= float64(chatMembersCount)/2
 }
