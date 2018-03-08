@@ -39,8 +39,6 @@ func InitServer() {
 			phrases := commands.JudgeList()
 			answer := ""
 			for _, judgePhrase := range phrases {
-				// N - chatMembersCount, x - in favor, y - against
-				// x - y >= N / 3 && x >= N / 2
 				prefix := "- "
 				if inFavor(judgePhrase, chatMembersCount) {
 					prefix = "+ "
@@ -58,6 +56,9 @@ func InitServer() {
 		}
 	}
 }
+
+// N-chatMembersCount, x-in favor, y-against
+// x-y >= N/3 && x+y >= N/2
 func inFavor(judgePhrase database.JudgePhraseInfo, chatMembersCount int) bool {
 	return float64(judgePhrase.Voteup-judgePhrase.Votedown) >= float64(chatMembersCount)/3 && float64(judgePhrase.Voteup+judgePhrase.Votedown) >= float64(chatMembersCount)/2
 }
