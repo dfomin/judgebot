@@ -3,11 +3,11 @@ package commands
 import (
 	"judgebot/database"
 	"math/rand"
-	"strings"
 	"strconv"
+	"strings"
 )
 
-const sharpSymbol = "#"
+const placeholderSymbol = "%"
 
 var _dbc *database.Controller = nil
 
@@ -27,7 +27,7 @@ func Judge(names []string, chatMembersCount int) string {
 	}
 	for _, name := range names {
 		phrase := judgePhrases[rand.Intn(len(judgePhrases))]
-		result += strings.Replace(phrase.Phrase, sharpSymbol, name, -1) + "\n"
+		result += strings.Replace(phrase.Phrase, placeholderSymbol, name, -1) + "\n"
 	}
 	return result
 }
@@ -52,14 +52,19 @@ func JudgeVote(userID int, phrase string, vote bool) {
 // N-chatMembersCount, x-in favor, y-against
 // x-y >= N/3 && x+y >= N/2
 func inFavor(judgePhrase database.JudgePhraseInfo, chatMembersCount int) bool {
-	return float64(judgePhrase.Voteup-judgePhrase.Votedown) >= float64(chatMembersCount)/3 && float64(judgePhrase.Voteup+judgePhrase.Votedown) >= float64(chatMembersCount)/2
+	votesFor := float64(judgePhrase.Voteup - judgePhrase.Votedown)
+	votesForMin := float64(chatMembersCount) / 3
+	allVotes := float64(judgePhrase.Voteup + judgePhrase.Votedown)
+	allVotesMin := float64(chatMembersCount) / 2
+
+	return votesFor >= votesForMin && allVotes >= allVotesMin
 }
 
 func applicableJudgeList(chatMembersCount int) []database.JudgePhraseInfo {
 	allPhrases := dbc().JudgeList()
 	var phrases []database.JudgePhraseInfo
 	for _, phrase := range allPhrases {
-		if inFavor(phrase, chatMembersCount) && strings.Contains(phrase.Phrase, sharpSymbol) {
+		if inFavor(phrase, chatMembersCount) && strings.Contains(phrase.Phrase, placeholderSymbol) {
 			phrases = append(phrases, phrase)
 		}
 	}

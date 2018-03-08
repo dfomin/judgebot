@@ -5,6 +5,7 @@ import (
 	"judgebot/private"
 	"log"
 	"net/http"
+	"strings"
 
 	"gopkg.in/telegram-bot-api.v4"
 )
@@ -48,6 +49,15 @@ func InitServer() {
 			args := update.Message.CommandArguments()
 			if len(args) != 0 {
 				commands.JudgeVote(update.Message.From.ID, args, false)
+			}
+
+		case "judge":
+			args := update.Message.CommandArguments()
+			names := strings.Split(args, " ")
+			if len(names) > 0 {
+				answer := commands.Judge(names, chatMembersCount)
+				message := tgbotapi.NewMessage(update.Message.Chat.ID, answer)
+				bot.Send(message)
 			}
 		}
 	}
