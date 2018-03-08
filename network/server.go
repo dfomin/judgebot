@@ -5,10 +5,8 @@ import (
 	"judgebot/private"
 	"log"
 	"net/http"
-	"strconv"
 
 	"gopkg.in/telegram-bot-api.v4"
-	"judgebot/database"
 )
 
 func InitServer() {
@@ -36,29 +34,21 @@ func InitServer() {
 		command := update.Message.Command()
 		switch command {
 		case "judgeList":
-			phrases := commands.JudgeList()
-			answer := ""
-			for _, judgePhrase := range phrases {
-				prefix := "- "
-				if inFavor(judgePhrase, chatMembersCount) {
-					prefix = "+ "
-				}
-				answer +=  prefix + judgePhrase.Phrase + " " + strconv.Itoa(judgePhrase.Voteup) + " " + strconv.Itoa(judgePhrase.Votedown) + "\n"
-			}
+			answer := commands.JudgeList(chatMembersCount)
 			message := tgbotapi.NewMessage(update.Message.Chat.ID, answer)
 			bot.Send(message)
 
 		case "judgeAdd":
-			commands.JudgeVote(update.Message.From.ID, update.Message.CommandArguments(), true)
+			args := update.Message.CommandArguments()
+			if len(args) != 0 {
+				commands.JudgeVote(update.Message.From.ID, args, true)
+			}
 
 		case "judgeRemove":
-			commands.JudgeVote(update.Message.From.ID, update.Message.CommandArguments(), false)
+			args := update.Message.CommandArguments()
+			if len(args) != 0 {
+				commands.JudgeVote(update.Message.From.ID, args, false)
+			}
 		}
 	}
-}
-
-// N-chatMembersCount, x-in favor, y-against
-// x-y >= N/3 && x+y >= N/2
-func inFavor(judgePhrase database.JudgePhraseInfo, chatMembersCount int) bool {
-	return float64(judgePhrase.Voteup-judgePhrase.Votedown) >= float64(chatMembersCount)/3 && float64(judgePhrase.Voteup+judgePhrase.Votedown) >= float64(chatMembersCount)/2
 }
