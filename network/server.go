@@ -8,6 +8,7 @@ import (
 	"strconv"
 
 	"gopkg.in/telegram-bot-api.v4"
+	"judgebot/database"
 )
 
 func InitServer() {
@@ -27,13 +28,22 @@ func InitServer() {
 	go http.ListenAndServeTLS(":8443", "fullchain.pem", "privkey.pem", nil)
 
 	for update := range updates {
+		chatMembersCount, err := bot.GetChatMembersCount(tgbotapi.ChatConfig{ChatID: update.Message.Chat.ID})
+		if err != nil {
+			log.Fatal(err)
+		}
+
 		command := update.Message.Command()
 		switch command {
 		case "judgeList":
 			phrases := commands.JudgeList()
 			answer := ""
 			for _, judgePhrase := range phrases {
-				answer += judgePhrase.Phrase + " " + strconv.Itoa(judgePhrase.Voteup) + " " + strconv.Itoa(judgePhrase.Votedown) + "\n"
+				// N - chatMembersCount, x - in favor, y - against
+				// x - y >= N / 3 && x >= N / 2
+				if inFavor(judgePhrase, chatMembersCount) {
+					answer += judgePhrase.Phrase + " " + strconv.Itoa(judgePhrase.Voteup) + " " + strconv.Itoa(judgePhrase.Votedown) + "\n"
+				}
 			}
 			message := tgbotapi.NewMessage(update.Message.Chat.ID, answer)
 			bot.Send(message)
@@ -45,4 +55,7 @@ func InitServer() {
 			commands.JudgeVote(update.Message.From.ID, update.Message.CommandArguments(), false)
 		}
 	}
+}
+func inFavor(judgePhrase database.JudgePhraseInfo, chatMembersCount int) bool {
+	return judgePhrase.Voteup-judgePhrase.Votedown >= chatMembersCount/3 && judgePhrase.Voteup >= chatMembersCount/2
 }
