@@ -27,6 +27,10 @@ func InitServer() {
 	go http.ListenAndServeTLS(":8443", "fullchain.pem", "privkey.pem", nil)
 
 	for update := range updates {
+		if update.Message == nil {
+			continue
+		}
+
 		chatID := update.Message.Chat.ID
 		chatMembersCount, err := bot.GetChatMembersCount(tgbotapi.ChatConfig{ChatID: chatID})
 		if err != nil {
