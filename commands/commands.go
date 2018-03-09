@@ -45,8 +45,8 @@ func JudgeList(chatMembersCount int) string {
 	return result
 }
 
-func JudgeVote(userID int, phrase string, vote bool) {
-	dbc().JudgeVote(userID, phrase, vote)
+func JudgeVote(userID int, chatID int64, phrase string, vote bool) {
+	dbc().JudgeVote(userID, chatID, phrase, vote)
 }
 
 // N-chatMembersCount, x-in favor, y-against

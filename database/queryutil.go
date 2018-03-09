@@ -5,7 +5,7 @@ import (
 	"judgebot/private"
 )
 
-const users = `users`
+const chatUsers = `chat_users`
 const judgePhrases = `judge_phrases`
 const votes = `votes`
 
@@ -19,15 +19,14 @@ ON judge_phrases.id = votes.judge_phrase_id
 GROUP BY judge_phrases.phrase
 `
 
-const userIDQueryTemplate = `SELECT id FROM %s.%s WHERE telegram_id = $1`
+const chatUserIDQueryTemplate = `SELECT id FROM %s.%s WHERE user_id = $1 and chat_id = $2`
 const phraseIDQueryTemplate = `SELECT id FROM %s.%s WHERE phrase = $1`
-const voteInsertQueryTemplate = `INSERT INTO %s.%s (vote, user_id, judge_phrase_id) VALUES ($1, $2, $3)
+const voteInsertQueryTemplate = `INSERT INTO %s.%s (vote, chat_user_id, judge_phrase_id) VALUES ($1, $2, $3)
 ON CONFLICT ON CONSTRAINT vote_pkey DO UPDATE SET vote = $1`
-const userInsertQueryTemplate = `INSERT INTO %s.%s (telegram_id) VALUES ($1) RETURNING id`
+const chatUserInsertQueryTemplate = `INSERT INTO %s.%s (user_id, chat_id) VALUES ($1, $2) RETURNING id`
 const phraseInsertQueryTemplate = `INSERT INTO %s.%s (phrase) VALUES ($1) RETURNING id`
 
 func getJudgeListQuery() string {
-	//return fmt.Sprintf(judgeListQueryTemplate, private.DatabaseName, judgePhrases)
 	return judgeListQueryTemplate
 }
 
@@ -39,8 +38,8 @@ func getVoteInsertQuery() string {
 	return fmt.Sprintf(voteInsertQueryTemplate, private.DatabaseName, votes)
 }
 
-func getUserIDQuery() string {
-	return fmt.Sprintf(userIDQueryTemplate, private.DatabaseName, users)
+func getChatUserIDQuery() string {
+	return fmt.Sprintf(chatUserIDQueryTemplate, private.DatabaseName, chatUsers)
 }
 
 func getPhraseIDQuery() string {
@@ -48,5 +47,5 @@ func getPhraseIDQuery() string {
 }
 
 func getUserInsertQuery() string {
-	return fmt.Sprintf(userInsertQueryTemplate, private.DatabaseName, users)
+	return fmt.Sprintf(chatUserInsertQueryTemplate, private.DatabaseName, chatUsers)
 }

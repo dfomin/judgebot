@@ -31,10 +31,11 @@ func Init() {
 			fmt.Println(result)
 		case "judgeVote":
 			userID, _ := strconv.Atoi(params[1])
-			phrase := params[2]
-			vote, _ := strconv.ParseBool(params[3])
-			fmt.Println(userID, phrase, vote)
-			commands.JudgeVote(userID, phrase, vote)
+			chatID, _ := strconv.ParseInt(params[2], 10, 64)
+			phrase := params[3]
+			vote, _ := strconv.ParseBool(params[4])
+			fmt.Println(userID, chatID, phrase, vote)
+			commands.JudgeVote(userID, chatID, phrase, vote)
 		}
 	}
 }

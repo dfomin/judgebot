@@ -36,20 +36,20 @@ func Init() *Controller {
 	return &Controller{DataBase: database}
 }
 
-func (dbc *Controller) getUserID(telegramID int) int {
-	var userID int
-	err := dbc.DataBase.QueryRow(getUserIDQuery(), telegramID).Scan(&userID)
+func (dbc *Controller) getChatUserID(userID int, chatID int64) int {
+	var chatUserID int
+	err := dbc.DataBase.QueryRow(getChatUserIDQuery(), userID, chatID).Scan(&chatUserID)
 	if err != nil {
 		if err != sql.ErrNoRows {
 			log.Fatal(err)
 		}
-		err = dbc.DataBase.QueryRow(getUserInsertQuery(), telegramID).Scan(&userID)
+		err = dbc.DataBase.QueryRow(getUserInsertQuery(), userID, chatID).Scan(&chatUserID)
 		if err != nil {
 			log.Fatal(err)
 		}
 	}
 
-	return userID
+	return chatUserID
 }
 
 func (dbc *Controller) getPhraseID(phrase string) int {
@@ -68,10 +68,10 @@ func (dbc *Controller) getPhraseID(phrase string) int {
 	return phraseID
 }
 
-func (dbc *Controller) JudgeVote(telegramID int, phrase string, vote bool) {
-	userID := dbc.getUserID(telegramID)
+func (dbc *Controller) JudgeVote(userID int, chatID int64, phrase string, vote bool) {
+	chatUserID := dbc.getChatUserID(userID, chatID)
 	phraseID := dbc.getPhraseID(phrase)
-	_, err := dbc.DataBase.Query(getVoteInsertQuery(), vote, userID, phraseID)
+	_, err := dbc.DataBase.Query(getVoteInsertQuery(), vote, chatUserID, phraseID)
 	if err != nil {
 		log.Fatal(err)
 	}

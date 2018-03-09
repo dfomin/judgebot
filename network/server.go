@@ -27,7 +27,8 @@ func InitServer() {
 	go http.ListenAndServeTLS(":8443", "fullchain.pem", "privkey.pem", nil)
 
 	for update := range updates {
-		chatMembersCount, err := bot.GetChatMembersCount(tgbotapi.ChatConfig{ChatID: update.Message.Chat.ID})
+		chatID := update.Message.Chat.ID
+		chatMembersCount, err := bot.GetChatMembersCount(tgbotapi.ChatConfig{ChatID: chatID})
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -36,19 +37,19 @@ func InitServer() {
 		switch command {
 		case "judgeList":
 			answer := commands.JudgeList(chatMembersCount)
-			message := tgbotapi.NewMessage(update.Message.Chat.ID, answer)
+			message := tgbotapi.NewMessage(chatID, answer)
 			bot.Send(message)
 
 		case "judgeAdd":
 			args := update.Message.CommandArguments()
 			if len(args) != 0 {
-				commands.JudgeVote(update.Message.From.ID, args, true)
+				commands.JudgeVote(update.Message.From.ID, chatID, args, true)
 			}
 
 		case "judgeRemove":
 			args := update.Message.CommandArguments()
 			if len(args) != 0 {
-				commands.JudgeVote(update.Message.From.ID, args, false)
+				commands.JudgeVote(update.Message.From.ID, chatID, args, false)
 			}
 
 		case "judge":
@@ -56,7 +57,7 @@ func InitServer() {
 			names := strings.Split(args, " ")
 			if len(names) > 0 {
 				answer := commands.Judge(names, chatMembersCount)
-				message := tgbotapi.NewMessage(update.Message.Chat.ID, answer)
+				message := tgbotapi.NewMessage(chatID, answer)
 				bot.Send(message)
 			}
 		}
