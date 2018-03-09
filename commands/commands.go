@@ -19,9 +19,9 @@ func dbc() *database.Controller {
 	return _dbc
 }
 
-func Judge(names []string, chatMembersCount int) string {
+func Judge(names []string, chatID int64, chatMembersCount int) string {
 	result := ""
-	judgePhrases := applicableJudgeList(chatMembersCount)
+	judgePhrases := applicableJudgeList(chatID, chatMembersCount)
 	if len(judgePhrases) == 0 {
 		return "There are no judge phrases\n"
 	}
@@ -32,9 +32,9 @@ func Judge(names []string, chatMembersCount int) string {
 	return result
 }
 
-func JudgeList(chatMembersCount int) string {
+func JudgeList(chatID int64, chatMembersCount int) string {
 	result := ""
-	judgePhrases := dbc().JudgeList()
+	judgePhrases := dbc().JudgeList(chatID)
 	for _, judgePhrase := range judgePhrases {
 		prefix := "- "
 		if inFavor(judgePhrase, chatMembersCount) {
@@ -60,8 +60,8 @@ func inFavor(judgePhrase database.JudgePhraseInfo, chatMembersCount int) bool {
 	return votesFor >= votesForMin && allVotes >= allVotesMin
 }
 
-func applicableJudgeList(chatMembersCount int) []database.JudgePhraseInfo {
-	allPhrases := dbc().JudgeList()
+func applicableJudgeList(chatID int64, chatMembersCount int) []database.JudgePhraseInfo {
+	allPhrases := dbc().JudgeList(chatID)
 	var phrases []database.JudgePhraseInfo
 	for _, phrase := range allPhrases {
 		if inFavor(phrase, chatMembersCount) && strings.Contains(phrase.Phrase, placeholderSymbol) {

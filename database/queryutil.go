@@ -14,8 +14,11 @@ SELECT judge_phrases.phrase,
 SUM(case when votes.vote = true then 1 else 0 end),
 SUM(case when votes.vote = false then 1 else 0 end)
 FROM judgebot.judge_phrases
-LEFT JOIN judgebot.votes
+INNER JOIN judgebot.votes
 ON judge_phrases.id = votes.judge_phrase_id
+INNER JOIN judgebot.chat_users
+ON votes.chat_user_id = chat_users.id
+WHERE chat_users.chat_id = $1
 GROUP BY judge_phrases.phrase
 `
 

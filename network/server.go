@@ -40,7 +40,7 @@ func InitServer() {
 		command := update.Message.Command()
 		switch command {
 		case "judgeList":
-			answer := commands.JudgeList(chatMembersCount)
+			answer := commands.JudgeList(chatID, chatMembersCount)
 			message := tgbotapi.NewMessage(chatID, answer)
 			bot.Send(message)
 
@@ -60,7 +60,7 @@ func InitServer() {
 			args := update.Message.CommandArguments()
 			names := strings.Split(args, " ")
 			if len(names) > 0 {
-				answer := commands.Judge(names, chatMembersCount)
+				answer := commands.Judge(names, chatID, chatMembersCount)
 				message := tgbotapi.NewMessage(chatID, answer)
 				bot.Send(message)
 			}

@@ -77,8 +77,8 @@ func (dbc *Controller) JudgeVote(userID int, chatID int64, phrase string, vote b
 	}
 }
 
-func (dbc *Controller) JudgeList() []JudgePhraseInfo {
-	rows, err := dbc.DataBase.Query(getJudgeListQuery())
+func (dbc *Controller) JudgeList(chatID int64) []JudgePhraseInfo {
+	rows, err := dbc.DataBase.Query(getJudgeListQuery(), chatID)
 	if err != nil {
 		log.Fatal(err)
 	}

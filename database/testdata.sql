@@ -45,3 +45,5 @@ INSERT INTO judgebot.votes (vote, chat_user_id, judge_phrase_id) VALUES (FALSE, 
 INSERT INTO judgebot.votes (vote, chat_user_id, judge_phrase_id) VALUES (TRUE, 6, 3);
 
 INSERT INTO judgebot.votes (vote, chat_user_id, judge_phrase_id) VALUES (TRUE, 7, 1);
+
+INSERT INTO judgebot.votes (vote, chat_user_id, judge_phrase_id) VALUES (FALSE, 8, 3);
