@@ -6,11 +6,13 @@ CREATE DATABASE judgebot OWNER judgebot;
 
 CREATE SCHEMA judgebot AUTHORIZATION judgebot;
 
-CREATE TABLE judgebot.users (
+CREATE TABLE judgebot.chat_users (
     id serial NOT NULL,
-    telegram_id integer UNIQUE NOT NULL,
+    user_id integer NOT NULL,
+    chat_id integer NOT NULL,
 
-    CONSTRAINT users_pkey PRIMARY KEY (id)
+    CONSTRAINT users_pkey PRIMARY KEY (id),
+    CONSTRAINT chat_users_unique UNIQUE (user_id, chat_id)
 );
 
 CREATE TABLE judgebot.judge_phrases (
@@ -22,11 +24,11 @@ CREATE TABLE judgebot.judge_phrases (
 
 CREATE TABLE judgebot.votes (
     vote boolean NOT NULL,
-    user_id integer NOT NULL,
+    chat_user_id integer NOT NULL,
     judge_phrase_id integer NOT NULL,
 
-    CONSTRAINT vote_pkey PRIMARY KEY (user_id, judge_phrase_id),
-    CONSTRAINT user_id_fkey FOREIGN KEY (user_id) REFERENCES judgebot.users (id),
+    CONSTRAINT vote_pkey PRIMARY KEY (chat_user_id, judge_phrase_id),
+    CONSTRAINT user_id_fkey FOREIGN KEY (chat_user_id) REFERENCES judgebot.chat_users (id),
     CONSTRAINT judge_phrase_id_fkey FOREIGN KEY (judge_phrase_id) REFERENCES judgebot.judge_phrases (id)
 );
 
