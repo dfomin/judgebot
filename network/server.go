@@ -37,7 +37,7 @@ func InitServer() {
 			log.Fatal(err)
 		}
 
-		command := update.Message.Command()
+		command := strings.ToLower(update.Message.Command())
 		switch command {
 		case "judgelist":
 			answer := commands.JudgeList(chatID, chatMembersCount)
