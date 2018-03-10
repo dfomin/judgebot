@@ -39,18 +39,18 @@ func InitServer() {
 
 		command := update.Message.Command()
 		switch command {
-		case "judgeList":
+		case "judgelist":
 			answer := commands.JudgeList(chatID, chatMembersCount)
 			message := tgbotapi.NewMessage(chatID, answer)
 			bot.Send(message)
 
-		case "judgeAdd":
+		case "judgeadd":
 			args := update.Message.CommandArguments()
 			if len(args) != 0 {
 				commands.JudgeVote(update.Message.From.ID, chatID, args, true)
 			}
 
-		case "judgeRemove":
+		case "judgeremove":
 			args := update.Message.CommandArguments()
 			if len(args) != 0 {
 				commands.JudgeVote(update.Message.From.ID, chatID, args, false)

@@ -27,11 +27,11 @@ func Init() {
 			chatID, _ := strconv.ParseInt(params[1], 10, 64)
 			result := commands.Judge(params[2:], chatID, chatMembersCount)
 			fmt.Println(result)
-		case "judgeList":
+		case "judgelist":
 			chatID, _ := strconv.ParseInt(params[1], 10, 64)
 			result := commands.JudgeList(chatID, chatMembersCount)
 			fmt.Println(result)
-		case "judgeVote":
+		case "judgevote":
 			userID, _ := strconv.Atoi(params[1])
 			chatID, _ := strconv.ParseInt(params[2], 10, 64)
 			vote, _ := strconv.ParseBool(params[3])
