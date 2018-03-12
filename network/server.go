@@ -32,7 +32,7 @@ func InitServer() {
 		}
 
 		chatID := update.Message.Chat.ID
-		chatMembersCount, err := bot.GetChatMembersCount(tgbotapi.ChatConfig{ChatID: chatID})
+		chatMembersCount, err := bot.GetChatMembersCount(tgbotapi.ChatConfig{ChatID: chatID}) - 1
 		if err != nil {
 			log.Fatal(err)
 		}
