@@ -32,10 +32,12 @@ func InitServer() {
 		}
 
 		chatID := update.Message.Chat.ID
-		chatMembersCount, err := bot.GetChatMembersCount(tgbotapi.ChatConfig{ChatID: chatID}) - 1
+		chatMembersCount, err := bot.GetChatMembersCount(tgbotapi.ChatConfig{ChatID: chatID})
 		if err != nil {
 			log.Fatal(err)
 		}
+
+		chatMembersCount -= 1
 
 		command := strings.ToLower(update.Message.Command())
 		switch command {
