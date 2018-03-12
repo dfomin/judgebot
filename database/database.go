@@ -71,7 +71,8 @@ func (dbc *Controller) getPhraseID(phrase string) int {
 func (dbc *Controller) JudgeVote(userID int, chatID int64, phrase string, vote bool) {
 	chatUserID := dbc.getChatUserID(userID, chatID)
 	phraseID := dbc.getPhraseID(phrase)
-	_, err := dbc.DataBase.Query(getVoteInsertQuery(), vote, chatUserID, phraseID)
+	rows, err := dbc.DataBase.Query(getVoteInsertQuery(), vote, chatUserID, phraseID)
+	defer rows.Close()
 	if err != nil {
 		log.Fatal(err)
 	}
