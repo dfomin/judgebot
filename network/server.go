@@ -48,17 +48,17 @@ func InitServer() {
 			bot.Send(message)
 
 		case "judgeadd":
-			if len(args) != 0 {
+			if len(args) > 0 {
 				commands.JudgeVote(update.Message.From.ID, chatID, args, true)
 			}
 
 		case "judgeremove":
-			if len(args) != 0 {
+			if len(args) > 0 {
 				commands.JudgeVote(update.Message.From.ID, chatID, args, false)
 			}
 
 		case "judge":
-			if len(args) != 0 {
+			if len(args) > 0 {
 				names := strings.Split(args, " ")
 				if len(names) > 0 {
 					answer := commands.Judge(names, chatID, chatMembersCount)

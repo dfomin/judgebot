@@ -87,12 +87,11 @@ func (dbc *Controller) JudgeList(chatID int64) []JudgePhraseInfo {
 	var phrases []JudgePhraseInfo
 	for rows.Next() {
 		var phrase string
-		var voteup int
-		var votedown int
-		if err := rows.Scan(&phrase, &voteup, &votedown); err != nil {
+		var voteUp, voteDown int
+		if err := rows.Scan(&phrase, &voteUp, &voteDown); err != nil {
 			log.Fatal(err)
 		}
-		phrases = append(phrases, JudgePhraseInfo{phrase, voteup, votedown})
+		phrases = append(phrases, JudgePhraseInfo{phrase, voteUp, voteDown})
 	}
 
 	return phrases

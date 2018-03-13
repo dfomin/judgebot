@@ -22,7 +22,7 @@ func Init() {
 			continue
 		}
 
-		switch params[0] {
+		switch strings.ToLower(params[0]) {
 		case "judge":
 			chatID, _ := strconv.ParseInt(params[1], 10, 64)
 			result := commands.Judge(params[2:], chatID, chatMembersCount)
