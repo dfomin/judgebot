@@ -40,6 +40,7 @@ func InitServer() {
 		chatMembersCount -= 1
 
 		command := strings.ToLower(update.Message.Command())
+		args := strings.Trim(update.Message.CommandArguments(), " ")
 		switch command {
 		case "judgelist":
 			answer := commands.JudgeList(chatID, chatMembersCount)
@@ -47,19 +48,16 @@ func InitServer() {
 			bot.Send(message)
 
 		case "judgeadd":
-			args := update.Message.CommandArguments()
 			if len(args) != 0 {
 				commands.JudgeVote(update.Message.From.ID, chatID, args, true)
 			}
 
 		case "judgeremove":
-			args := update.Message.CommandArguments()
 			if len(args) != 0 {
 				commands.JudgeVote(update.Message.From.ID, chatID, args, false)
 			}
 
 		case "judge":
-			args := update.Message.CommandArguments()
 			names := strings.Split(args, " ")
 			if len(names) > 0 {
 				answer := commands.Judge(names, chatID, chatMembersCount)
