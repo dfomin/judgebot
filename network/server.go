@@ -58,11 +58,13 @@ func InitServer() {
 			}
 
 		case "judge":
-			names := strings.Split(args, " ")
-			if len(names) > 0 {
-				answer := commands.Judge(names, chatID, chatMembersCount)
-				message := tgbotapi.NewMessage(chatID, answer)
-				bot.Send(message)
+			if len(args) != 0 {
+				names := strings.Split(args, " ")
+				if len(names) > 0 {
+					answer := commands.Judge(names, chatID, chatMembersCount)
+					message := tgbotapi.NewMessage(chatID, answer)
+					bot.Send(message)
+				}
 			}
 		}
 	}
