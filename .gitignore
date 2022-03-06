@@ -2,3 +2,7 @@
 private.go
 bin/
 pkg/
+private.py
+.DS_Store
+.idea/
+__pycache__/
