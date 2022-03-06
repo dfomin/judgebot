@@ -13,7 +13,7 @@ def main():
 
     updater.start_webhook(listen="127.0.0.1",
                           port=5002,
-                          url_path=f"{TOKEN}",
+                          url_path=TOKEN,
                           webhook_url=f"https://dfomin.com:443/{TOKEN}")
     dispatcher: Dispatcher = updater.dispatcher
     dispatcher.add_handler(CommandHandler("start", start))
