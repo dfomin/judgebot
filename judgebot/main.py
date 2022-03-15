@@ -19,7 +19,8 @@ def help(update: Update, context: CallbackContext):
 def judge(update: Update, context: CallbackContext):
     # context.bot.send_message(chat_id=update.effective_chat.id, text="😐")
     phrases = applicable_judge_list(update.effective_chat.id, 0)
-    context.bot.send_message(chat_id=update.effective_chat.id, text=phrases[0])
+    for phrase in phrases[:3]:
+        context.bot.send_message(chat_id=update.effective_chat.id, text=phrase[0])
 
 
 def applicable_judge_list(chat_id: int, chat_members_count: int) -> List[str]:
@@ -30,7 +31,7 @@ def applicable_judge_list(chat_id: int, chat_members_count: int) -> List[str]:
 def get_sorted_judge_phrases(chat_id: int, chat_members_count: int) -> List[str]:
     with psycopg.connect(f"dbname={DATABASE_NAME} password={DATABASE_PASSWORD} user={DATABASE_USER} sslmode=disable") as conn:
         with conn.cursor() as cur:
-            cur.execute(get_judge_list_query(), f"{chat_id}")
+            cur.execute(get_judge_list_query(), (chat_id,))
             return cur.fetchall()
 
 
