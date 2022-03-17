@@ -42,13 +42,14 @@ def judge(update: Update, context: CallbackContext):
     else:
         chat_members_count = context.bot.get_chat_member_count(update.effective_chat.id) - 1
         phrases = applicable_judge_list(update.effective_chat.id, chat_members_count)
+        phrases = [phrase for phrase in phrases if phrase.status == PhraseStatus.ACCEPTED]
         result = ""
-        for part in parts:
+        for part in parts[1:]:
             phrase = random.choice(phrases)
             if len(result) > 0:
                 result += "\n"
             result += phrase.text.replace("%", part)
-            context.bot.send_message(chat_id=update.effective_chat.id, text=result)
+        context.bot.send_message(chat_id=update.effective_chat.id, text=result)
 
 
 def judge_list(update: Update, context: CallbackContext):
