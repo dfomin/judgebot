@@ -41,7 +41,8 @@ def judge(update: Update, context: CallbackContext):
 
 
 def judge_list(update: Update, context: CallbackContext):
-    phrases = applicable_judge_list(update.effective_chat.id, 0)
+    chat_members_count = context.bot.get_chat_member_count(update.effective_chat.id) - 1
+    phrases = applicable_judge_list(update.effective_chat.id, chat_members_count)
     current_status = None
     result = ""
     for phrase in sorted(phrases, key=lambda x: x.sort_value):
@@ -80,7 +81,7 @@ def get_sorted_judge_phrases(chat_id: int, chat_members_count: int) -> List[Phra
                         status = PhraseStatus.IN_PROGRESS
                 else:
                     status = PhraseStatus.REJECTED
-                sort_value = (vote_up - vote_down) * 1000 + vote_up     # Will not work for huge amount of votes
+                sort_value = -(vote_up - vote_down) * 1000 - vote_up     # Will not work for huge amount of votes
                 phrases.append(Phrase(text, vote_up, vote_down, status, sort_value))
             return phrases
 
