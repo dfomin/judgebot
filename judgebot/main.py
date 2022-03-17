@@ -1,5 +1,7 @@
+import random
 from dataclasses import dataclass
 from enum import Enum, auto
+from time import time
 from typing import List
 
 import psycopg
@@ -34,10 +36,19 @@ def help(update: Update, context: CallbackContext):
 
 
 def judge(update: Update, context: CallbackContext):
-    context.bot.send_message(chat_id=update.effective_chat.id, text="😐")
-    # phrases = applicable_judge_list(update.effective_chat.id, 0)
-    # for phrase in phrases[:3]:
-    #     context.bot.send_message(chat_id=update.effective_chat.id, text=phrase[0])
+    parts = update.message.text.split()
+    if len(parts) <= 1:
+        context.bot.send_message(chat_id=update.effective_chat.id, text="😐")
+    else:
+        chat_members_count = context.bot.get_chat_member_count(update.effective_chat.id) - 1
+        phrases = applicable_judge_list(update.effective_chat.id, chat_members_count)
+        result = ""
+        for part in parts:
+            phrase = random.choice(phrases)
+            if len(result) > 0:
+                result += "\n"
+            result += phrase.text.replace("%", part)
+            context.bot.send_message(chat_id=update.effective_chat.id, text=result)
 
 
 def judge_list(update: Update, context: CallbackContext):
@@ -89,6 +100,8 @@ def get_sorted_judge_phrases(chat_id: int, chat_members_count: int) -> List[Phra
 
 
 def main():
+    random.seed(time())
+
     updater = Updater(TOKEN, use_context=True)
 
     updater.start_webhook(listen="127.0.0.1",
