@@ -59,7 +59,8 @@ def get_chat_user_id(user_id: int, chat_id: int) -> Optional[int]:
             cur.execute(get_chat_user_id_query(), (user_id, chat_id))
             rows = cur.fetchall()
             if len(rows) != 1:
-                rows = cur.execute(get_user_insert_query(), (user_id, chat_id))
+                cur.execute(get_user_insert_query(), (user_id, chat_id))
+                rows = cur.fetchall()
             if len(rows) != 1:
                 return None
             return rows[0][0]
@@ -71,7 +72,8 @@ def get_phrase_id(phrase: str) -> Optional[int]:
             cur.execute(get_phrase_id_query(), (phrase,))
             rows = cur.fetchall()
             if len(rows) != 1:
-                rows = cur.execute(get_phrase_insert_query(), (phrase,))
+                cur.execute(get_phrase_insert_query(), (phrase,))
+                rows = cur.fetchall()
             if len(rows) != 1:
                 return None
             return rows[0][0]
