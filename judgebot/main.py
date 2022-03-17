@@ -54,7 +54,7 @@ def judge_list(update: Update, context: CallbackContext):
             result += "+ "
         else:
             result += "- "
-        result += f"{phrase.vote_up} {phrase.vote_down} {phrase.text}"
+        result += f"{phrase.vote_up} {phrase.vote_down} {phrase.text}\n"
     context.bot.send_message(chat_id=update.effective_chat.id, text=result)
 
 
@@ -96,7 +96,7 @@ def main():
     dispatcher.add_handler(CommandHandler("start", start))
     dispatcher.add_handler(CommandHandler("help", help))
     dispatcher.add_handler(CommandHandler("judge", judge))
-    dispatcher.add_handler(CommandHandler("judge_list", judge_list))
+    dispatcher.add_handler(CommandHandler("judgelist", judge_list))
 
 
 if __name__ == "__main__":
