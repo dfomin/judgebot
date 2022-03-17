@@ -62,7 +62,7 @@ def get_chat_user_id(user_id: int, chat_id: int) -> Optional[int]:
                 rows = cur.execute(get_user_insert_query(), (user_id, chat_id))
             if len(rows) != 1:
                 return None
-            return rows[0]
+            return rows[0][0]
 
 
 def get_phrase_id(phrase: str) -> Optional[int]:
@@ -74,7 +74,7 @@ def get_phrase_id(phrase: str) -> Optional[int]:
                 rows = cur.execute(get_phrase_insert_query(), (phrase,))
             if len(rows) != 1:
                 return None
-            return rows[0]
+            return rows[0][0]
 
 
 def judge_vote(user_id: int, chat_id: int, phrase: str, vote: bool):
