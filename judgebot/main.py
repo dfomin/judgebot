@@ -34,10 +34,10 @@ def help(update: Update, context: CallbackContext):
 
 
 def judge(update: Update, context: CallbackContext):
-    # context.bot.send_message(chat_id=update.effective_chat.id, text="😐")
-    phrases = applicable_judge_list(update.effective_chat.id, 0)
-    for phrase in phrases[:3]:
-        context.bot.send_message(chat_id=update.effective_chat.id, text=phrase[0])
+    context.bot.send_message(chat_id=update.effective_chat.id, text="😐")
+    # phrases = applicable_judge_list(update.effective_chat.id, 0)
+    # for phrase in phrases[:3]:
+    #     context.bot.send_message(chat_id=update.effective_chat.id, text=phrase[0])
 
 
 def judge_list(update: Update, context: CallbackContext):
@@ -96,7 +96,7 @@ def main():
     dispatcher.add_handler(CommandHandler("start", start))
     dispatcher.add_handler(CommandHandler("help", help))
     dispatcher.add_handler(CommandHandler("judge", judge))
-    dispatcher.add_handler(CommandHandler("judge", judge_list))
+    dispatcher.add_handler(CommandHandler("judge_list", judge_list))
 
 
 if __name__ == "__main__":
