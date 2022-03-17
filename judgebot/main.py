@@ -74,14 +74,16 @@ def get_sorted_judge_phrases(chat_id: int, chat_members_count: int) -> List[Phra
                 text = row[0]
                 vote_up = row[1]
                 vote_down = row[2]
+                sort_value = -(vote_up - vote_down) * 100 - vote_up     # Will not work for huge amount of votes
                 if vote_up + vote_down >= chat_members_count / 2:
                     if vote_up - vote_down >= chat_members_count / 3:
                         status = PhraseStatus.ACCEPTED
+                        sort_value -= 1000000
                     else:
                         status = PhraseStatus.IN_PROGRESS
+                        sort_value -= 10000
                 else:
                     status = PhraseStatus.REJECTED
-                sort_value = -(vote_up - vote_down) * 1000 - vote_up     # Will not work for huge amount of votes
                 phrases.append(Phrase(text, vote_up, vote_down, status, sort_value))
             return phrases
 
