@@ -29,7 +29,7 @@ chat_user_insert_query_template = f"""
 INSERT INTO {DATABASE_NAME}.{chat_users} (user_id, chat_id)
 VALUES (%s, %s)
 RETURNING id"""
-phrase_insert_query_template = "INSERT INTO {DATABASE_NAME}.{chat_users} (phrase) VALUES (%s) RETURNING id"
+phrase_insert_query_template = f"INSERT INTO {DATABASE_NAME}.{chat_users} (phrase) VALUES (%s) RETURNING id"
 
 
 def get_judge_list_query() -> str:
@@ -53,4 +53,4 @@ def get_phrase_id_query() -> str:
 
 
 def get_user_insert_query() -> str:
-    return chat_user_insert_query_template.format(private.DATABASE_NAME, chat_users)
+    return chat_user_insert_query_template
